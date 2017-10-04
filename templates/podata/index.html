@@ -1,0 +1,63 @@
+{% csrf_token %}
+{% load static %}
+ 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css"/>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<!-- <script type="text/javascript" src="{% static "js/csrf.js" %}"></script> -->
+
+<script type="text/javascript">
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+</script>
+
+
+<table id="example" class="display">
+    <thead>
+        <!-- <td>Taluk</td> -->
+        <td>State Name</td>
+        <!-- <td>Related sub-office</td> -->
+        <td>Office Name</td>
+        <!-- <td>Division Name</td> -->
+        <td>Pincode</td>
+        <td>Related head-office</td>
+        <td>Circle Name</td>
+        <td>Delivery Status</td>
+        <td>Office type</td>
+        <td>District name</td>
+        <td>Telephone</td>
+        <!-- <td>Region name</td> -->
+    </thead>
+</table>
+
+<script>
+	$(document).ready(function(){
+        $("#example").DataTable({
+			"processing": true,
+			"serverSide": true,
+			"ajax": {
+                    "url": "{% url 'get_postal_data' %}",
+                    "type": "POST",
+                    "beforeSend": function(request){
+                        request.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+            },
+            "columns": [
+                //{ "data": "taluk"},
+                { "data": "statename"},
+                //{ "data": "related_suboffice"},
+                { "data": "officename"},
+                //{ "data": "divisionname"},
+                { "data": "pincode"},
+                { "data": "related_headoffice_" },
+                { "data": "circlename"},
+                { "data": "deliverystatus"},
+                { "data": "officetype"},
+                { "data": "districtname"},
+                { "data": "telephone"},
+                //{ "data": "regionname"},
+            ]
+		});
+	});		
+</script>
+
