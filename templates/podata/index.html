@@ -12,27 +12,46 @@
 </script>
 
 
-<table id="example" class="display">
-    <thead>
-        <!-- <td>Taluk</td> -->
-        <td>State Name</td>
-        <!-- <td>Related sub-office</td> -->
-        <td>Office Name</td>
-        <!-- <td>Division Name</td> -->
-        <td>Pincode</td>
-        <td>Related head-office</td>
-        <td>Circle Name</td>
-        <td>Delivery Status</td>
-        <td>Office type</td>
-        <td>District name</td>
-        <td>Telephone</td>
-        <!-- <td>Region name</td> -->
-    </thead>
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead><tr>
+        <!-- <th>Taluk</th> -->
+        <th>State Name</th>
+        <!-- <th>Related sub-office</th> -->
+        <th>Office Name</th>
+        <!-- <th>Division Name</th> -->
+        <th>Pincode</th>
+        <th>Related head-office</th>
+        <th>Circle Name</th>
+        <th>Delivery Status</th>
+        <th>Office type</th>
+        <th>District name</th>
+        <th>Telephone</th>
+        <!-- <th>Region name</th> -->
+    </tr></thead>
+    <tfoot><tr>
+        <!-- <th>Taluk</th> -->
+        <th>State Name</th>
+        <!-- <th>Related sub-office</th> -->
+        <th>Office Name</th>
+        <!-- <th>Division Name</th> -->
+        <th>Pincode</th>
+        <th>Related head-office</th>
+        <th>Circle Name</th>
+        <th>Delivery Status</th>
+        <th>Office type</th>
+        <th>District name</th>
+        <th>Telephone</th>
+        <!-- <th>Region name</th> -->
+    </tr></tfoot>
 </table>
 
 <script>
 	$(document).ready(function(){
-        $("#example").DataTable({
+        $('#example tfoot th').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+        } );
+        var table = $("#example").DataTable({
 			"processing": true,
 			"serverSide": true,
 			"ajax": {
@@ -58,6 +77,15 @@
                 //{ "data": "regionname"},
             ]
 		});
-	});		
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that.search( this.value ).draw();
+                }
+            } );
+        } );
+});		
 </script>
 
